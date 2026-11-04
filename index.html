@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caja fuerte · Álgebra lineal</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  :root { --bg:#f6f7fb; --card:#fff; --ink:#1d2433; --muted:#6b7385; --line:#dde1ea; --acc:#3b5bdb; --bad:#d6293e; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:780px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { margin:0 0 4px; font-size:28px; }
+  header p { margin:0 0 24px; color:var(--muted); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:16px; }
+  .ej h2 { margin:0 0 10px; font-size:18px; }
+  .ej h2 span { font-weight:400; color:var(--muted); font-size:14px; margin-left:8px; }
+  .ej ol { margin:10px 0; padding-left:22px; }
+  button { font:inherit; padding:9px 18px; border:0; border-radius:8px; background:var(--acc); color:#fff; cursor:pointer; }
+  button:hover { filter:brightness(1.08); }
+  button.link { background:none; color:var(--acc); padding:0; text-decoration:underline; }
+  input[type=number] { font:inherit; padding:8px 10px; width:120px; border:1px solid var(--line); border-radius:8px; }
+  .barra { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .msg { color:var(--bad); min-height:1.4em; margin:8px 0 0; }
+  .candado h2 { margin:0 0 6px; }
+  .candado p { margin:0 0 14px; color:var(--muted); }
+  .digitos { display:flex; gap:10px; margin-bottom:16px; }
+  .digitos input { width:56px; height:64px; text-align:center; font-size:28px; border:2px solid var(--line); border-radius:10px; background:#fff; transition:border-color .15s, background .15s; }
+  .digitos input:focus { outline:none; border-color:var(--acc); }
+  .candado.mal { border-color:var(--bad); animation:temblor .35s; }
+  .candado.mal .digitos input { border-color:var(--bad); background:#fdecee; }
+  @keyframes temblor { 25% { transform:translateX(-6px); } 75% { transform:translateX(6px); } }
+  [hidden] { display:none !important; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Caja fuerte</h1>
+    <p>Diagonalización ortogonal y formas cuadráticas</p>
+  </header>
+
+  <section id="login" class="card">
+    <label for="num"><strong>Número de equipo</strong></label><br>
+    <input id="num" type="number" min="1" inputmode="numeric" style="margin:8px 8px 0 0">
+    <button id="entrar">Entrar</button>
+    <p id="errLogin" class="msg"></p>
+  </section>
+
+  <section id="juego" hidden>
+    <div class="barra">
+      <span>Equipo <strong id="eq"></strong></span>
+      <button id="cambiar" class="link">Cambiar de equipo</button>
+    </div>
+    <div id="ejercicios"></div>
+    <div id="candado" class="card candado">
+      <h2>Candado</h2>
+      <p>Un dígito por ejercicio, en orden: ejercicio 1, 2, 3 y 4.</p>
+      <div id="digitos" class="digitos"></div>
+      <button id="probar">Probar código</button>
+      <p id="aviso" class="msg"></p>
+    </div>
+  </section>
+</main>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script src="ejercicios.js"></script>
+<script src="logica.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var MAX = window.CONFIG.MAX_EQUIPOS;
+  var equipo = null;
+
+  function mate() {
+    if (!window.renderMathInElement) return;
+    window.renderMathInElement($('ejercicios'), {
+      delimiters: [
+        { left: '\\(', right: '\\)', display: false },
+        { left: '$$', right: '$$', display: true }
+      ],
+      throwOnError: false
+    });
+  }
+  window.addEventListener('load', mate);
+
+  // ---- candado: un input por dígito ----
+  var caja = $('digitos');
+  for (var k = 0; k < window.BANCO.length; k++) {
+    var i = document.createElement('input');
+    i.type = 'text'; i.inputMode = 'numeric'; i.maxLength = 1; i.autocomplete = 'off';
+    i.setAttribute('aria-label', 'Dígito ' + (k + 1));
+    caja.appendChild(i);
+  }
+  var ins = Array.prototype.slice.call(caja.querySelectorAll('input'));
+  ins.forEach(function (inp, k) {
+    inp.addEventListener('input', function () {
+      inp.value = inp.value.replace(/\D/g, '').slice(0, 1);
+      if (inp.value && k < ins.length - 1) ins[k + 1].focus();
+    });
+    inp.addEventListener('keydown', function (e) {
+      if (e.key === 'Backspace' && !inp.value && k > 0) ins[k - 1].focus();
+      if (e.key === 'Enter') probar();
+    });
+    inp.addEventListener('paste', function (e) {
+      var t = ((e.clipboardData && e.clipboardData.getData('text')) || '').replace(/\D/g, '');
+      if (t.length > 1) {
+        e.preventDefault();
+        ins.forEach(function (x, j) { x.value = t[j] || ''; });
+      }
+    });
+  });
+
+  function probar() {
+    $('aviso').textContent = '';
+    var codigo = ins.map(function (x) { return x.value; }).join('');
+    window.Logica.verificar(equipo, window.BANCO, window.CONFIG.SALT, codigo).then(function (ok) {
+      if (ok) {
+        location.href = 'felicitaciones.html?equipo=' + equipo;
+      } else {
+        var c = $('candado');
+        c.classList.add('mal');
+        setTimeout(function () { c.classList.remove('mal'); }, 900);
+      }
+    }).catch(function () {
+      $('aviso').textContent = 'Este navegador no puede verificar el código. Abrí la página por https.';
+    });
+  }
+  $('probar').addEventListener('click', probar);
+
+  // ---- equipo y ejercicios ----
+  function entrar(n) {
+    equipo = n;
+    try { localStorage.setItem('equipo', String(n)); } catch (e) {}
+    $('login').hidden = true;
+    $('juego').hidden = false;
+    $('eq').textContent = n;
+    var cont = $('ejercicios');
+    cont.innerHTML = '';
+    window.Logica.variantesDelEquipo(n, window.BANCO).forEach(function (v, k) {
+      var art = document.createElement('article');
+      art.className = 'card ej';
+      art.innerHTML = '<h2>Ejercicio ' + (k + 1) + '<span>' + window.BANCO[k].titulo + '</span></h2>' +
+                      '<div class="enunciado">' + v.enunciado + '</div>';
+      cont.appendChild(art);
+    });
+    ins.forEach(function (x) { x.value = ''; });
+    mate();
+  }
+
+  function salir() {
+    equipo = null;
+    try { localStorage.removeItem('equipo'); } catch (e) {}
+    $('juego').hidden = true;
+    $('login').hidden = false;
+    $('num').value = '';
+    $('num').focus();
+  }
+
+  function leerEquipo() {
+    var v = new URLSearchParams(location.search).get('equipo');
+    try { if (!v) v = localStorage.getItem('equipo'); } catch (e) {}
+    var n = parseInt(v, 10);
+    return n >= 1 && n <= MAX ? n : null;
+  }
+
+  function intentarEntrar() {
+    var n = parseInt($('num').value, 10);
+    if (!(n >= 1 && n <= MAX)) {
+      $('errLogin').textContent = 'Ingresá un número de equipo entre 1 y ' + MAX + '.';
+      return;
+    }
+    $('errLogin').textContent = '';
+    entrar(n);
+  }
+  $('entrar').addEventListener('click', intentarEntrar);
+  $('num').addEventListener('keydown', function (e) { if (e.key === 'Enter') intentarEntrar(); });
+  $('cambiar').addEventListener('click', salir);
+
+  var guardado = leerEquipo();
+  if (guardado) entrar(guardado);
+})();
+</script>
+</body>
+</html>

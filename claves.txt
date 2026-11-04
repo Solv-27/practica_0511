@@ -1,0 +1,37 @@
+EJERCICIO 1 (dígito = valor crítico positivo de la incógnita)
+  a) b crítico = 3  (PD si |b| < 3)
+  b) c crítico = 8  (PD si c > 8)
+  c) b crítico = 6  (PD si |b| < 6)
+  d) c crítico = 4  (PD si c > 4)
+
+EJERCICIO 2 (dígito = y1, primera coordenada de P^T x0)
+  a) Q = 17x1² - 24x1x2 + 10x2²   [definida positiva]
+     A = [[17, -12], [-12, 10]], autovalores 1 y 26
+     P = (1/5)·[[3, 4], [4, -3]]  (columnas: v1 para 1, v2 para 26)
+     nueva forma: 1·y1² + 26·y2²;  x0 = (5,5) -> y0 = (7, 1);  dígito = 7
+  b) Q = -x1² - 24x1x2 + 6x2²   [indefinida]
+     A = [[-1, -12], [-12, 6]], autovalores -10 y 15
+     P = (1/5)·[[4, 3], [3, -4]]  (columnas: v1 para -10, v2 para 15)
+     nueva forma: -10·y1² + 15·y2²;  x0 = (1,2) -> y0 = (2, -1);  dígito = 2
+  c) Q = 18x1² + 24x1x2 + 11x2²   [definida positiva]
+     A = [[18, 12], [12, 11]], autovalores 2 y 27
+     P = (1/5)·[[3, 4], [-4, 3]]  (columnas: v1 para 2, v2 para 27)
+     nueva forma: 2·y1² + 27·y2²;  x0 = (7,-1) -> y0 = (5, 5);  dígito = 5
+  d) Q = -21x1² + 24x1x2 - 14x2²   [definida negativa]
+     A = [[-21, 12], [12, -14]], autovalores -30 y -5
+     P = (1/5)·[[4, 3], [-3, 4]]  (columnas: v1 para -30, v2 para -5)
+     nueva forma: -30·y1² + -5·y2²;  x0 = (9,-3) -> y0 = (9, 3);  dígito = 9
+
+CÓDIGO POR EQUIPO (ej.1, ej.2, ej.3, ej.4)
+  Equipo 1: 3700   (ej.1 variante a, ej.2 variante a)
+  Equipo 2: 8200   (ej.1 variante b, ej.2 variante b)
+  Equipo 3: 6500   (ej.1 variante c, ej.2 variante c)
+  Equipo 4: 4900   (ej.1 variante d, ej.2 variante d)
+  Equipo 5: 3200   (ej.1 variante a, ej.2 variante b)
+  Equipo 6: 8500   (ej.1 variante b, ej.2 variante c)
+  Equipo 7: 6900   (ej.1 variante c, ej.2 variante d)
+  Equipo 8: 4700   (ej.1 variante d, ej.2 variante a)
+  Equipo 9: 3500   (ej.1 variante a, ej.2 variante c)
+  Equipo 10: 8900   (ej.1 variante b, ej.2 variante d)
+
+Nota: los dígitos de los ejercicios 3 y 4 son provisorios (0) hasta que se carguen.
