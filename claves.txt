@@ -49,3 +49,4 @@ CÓDIGO POR EQUIPO (ej.1, ej.2, ej.3, ej.4)
   Equipo 8: 4739   (variantes d, a, d, d)
   Equipo 9: 3546   (variantes a, c, a, a)
   Equipo 10: 8937   (variantes b, d, b, b)
+  
