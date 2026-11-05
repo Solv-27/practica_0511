@@ -113,16 +113,104 @@ const ej2 = ej2defs.map((d) => {
 });
 assert.equal(new Set(ej2.map((e) => e.digito)).size, ej2.length, 'ej2: dígitos repetidos');
 
-// ───────────────── Ejercicios 3 y 4: espacio reservado ─────────────────
-const placeholder = (n) => [{
-  id: 'p',
-  enunciado: `<em>Ejercicio ${n}: pendiente de cargar.</em> Por ahora su dígito es <strong>0</strong>.`,
-  digito: 0,
-}];
-const ej3 = placeholder(3);
-const ej4 = placeholder(4);
-digitos['3|p'] = 0;
-digitos['4|p'] = 0;
+// ───────────────── Ejercicio 3: descomposición espectral (3×3 con un bloque 2×2) ─────────────────
+// A tiene un bloque [[a,b],[b,a]] en las coordenadas i,j y el valor c en la coordenada k.
+// Autovalores: a-b (u=(e_i-e_j)/√2), a+b (u=(e_i+e_j)/√2) y c (u=e_k).
+// Dígito: entrada (i,j) del término del mayor autovalor, (a+b)·u·uᵀ  ->  (a+b)/2.
+const bm3 = (M) => `\\begin{bmatrix}${M.map((r) => r.join('&')).join('\\\\')}\\end{bmatrix}`;
+
+const ej3defs = [
+  { id: 'a', par: [0, 1], a: 3, b: 1, c: 1 },
+  { id: 'b', par: [0, 2], a: 4, b: 2, c: 3 },
+  { id: 'c', par: [1, 2], a: 5, b: 3, c: 4 },
+  { id: 'd', par: [0, 1], a: 6, b: 4, c: 5 },
+];
+
+claves.push('', 'EJERCICIO 3 (dígito = entrada (i,j) del término del mayor autovalor)');
+const ej3 = ej3defs.map((d) => {
+  const [i, j] = d.par;
+  const k = [0, 1, 2].find((x) => x !== i && x !== j);
+  const A = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+  A[i][i] = d.a; A[j][j] = d.a; A[i][j] = d.b; A[j][i] = d.b; A[k][k] = d.c;
+
+  const lMas = d.a + d.b, lMenos = d.a - d.b;
+  assert.ok(d.b > 0, 'b > 0 para que el autovector del mayor sea (e_i+e_j)');
+  assert.ok(lMas > d.c && lMas > lMenos, 'el mayor autovalor debe estar en el bloque');
+  assert.equal(new Set([lMas, lMenos, d.c]).size, 3, 'autovalores distintos');
+
+  // Verificación con vectores enteros: A w = λ w
+  const mul = (v) => A.map((row) => row.reduce((s, x, t) => s + x * v[t], 0));
+  const e = (n) => [0, 1, 2].map((t) => (t === n ? 1 : 0));
+  const wMas = e(i).map((x, t) => x + e(j)[t]);
+  const wMenos = e(i).map((x, t) => x - e(j)[t]);
+  assert.deepEqual(mul(wMas), wMas.map((x) => lMas * x), 'A w+ != (a+b) w+');
+  assert.deepEqual(mul(wMenos), wMenos.map((x) => lMenos * x), 'A w- != (a-b) w-');
+  assert.deepEqual(mul(e(k)), e(k).map((x) => d.c * x), 'A e_k != c e_k');
+
+  // 2A = (a+b) w+w+ᵀ + (a-b) w-w-ᵀ + 2c e_k e_kᵀ   (los w tienen norma² = 2)
+  for (let r = 0; r < 3; r++) {
+    for (let s = 0; s < 3; s++) {
+      const suma = lMas * wMas[r] * wMas[s] + lMenos * wMenos[r] * wMenos[s] + 2 * d.c * e(k)[r] * e(k)[s];
+      assert.equal(suma, 2 * A[r][s], `descomposición espectral falla en (${r},${s})`);
+    }
+  }
+
+  const termino = (lMas * wMas[i] * wMas[j]) / 2; // (a+b)·(1/√2)(1/√2)
+  assert.ok(Number.isInteger(termino) && termino >= 0 && termino <= 9, 'dígito inválido');
+  digitos[`3|${d.id}`] = termino;
+  const fila = (M) => '[' + M.map((r) => '[' + r.join(', ') + ']').join(', ') + ']';
+  claves.push(
+    `  ${d.id}) A = ${fila(A)}, autovalores ${[lMenos, lMas, d.c].sort((x, y) => x - y).join(', ')}`,
+    `     mayor autovalor = ${lMas}, u = (e${i + 1}+e${j + 1})/√2;  término = ${lMas}/2·(1 en las posiciones (${i + 1},${i + 1}), (${i + 1},${j + 1}), (${j + 1},${i + 1}), (${j + 1},${j + 1}));  dígito = entrada (${i + 1},${j + 1}) = ${termino}`
+  );
+
+  const enunciado =
+    `Sea \\(A=${bm3(A)}\\).` +
+    `<ol>` +
+    `<li>Hallá una matriz ortogonal \\(P\\) y una matriz diagonal \\(D\\) tales que \\(A=PDP^{T}\\), con los autovalores de menor a mayor en \\(D\\).</li>` +
+    `<li>Escribí la descomposición espectral \\(A=\\lambda_1u_1u_1^{T}+\\lambda_2u_2u_2^{T}+\\lambda_3u_3u_3^{T}\\).</li>` +
+    `</ol><strong>Tu dígito es la entrada \\((${i + 1},${j + 1})\\) de \\(\\lambda_3u_3u_3^{T}\\).</strong>`;
+  return { id: d.id, enunciado, digito: termino };
+});
+assert.equal(new Set(ej3.map((e) => e.digito)).size, ej3.length, 'ej3: dígitos repetidos');
+
+// ───────────────── Ejercicio 4: optimización restringida (Q sobre la circunferencia unidad) ─────────────────
+// Q = a·x1² + 2b·x1x2 + c·x2²;  máximo de Q con x1²+x2²=1  =  mayor autovalor de [[a,b],[b,c]].
+const ej4defs = [
+  { id: 'a', a: 4, b: 4, c: -2 },
+  { id: 'b', a: 6, b: 3, c: -2 },
+  { id: 'c', a: 6, b: 4, c: 0 },
+  { id: 'd', a: 8, b: 3, c: 0 },
+];
+
+claves.push('', 'EJERCICIO 4 (dígito = máximo de Q con x1²+x2²=1)');
+const ej4 = ej4defs.map((d) => {
+  const m = (d.a + d.c) / 2, p = (d.a - d.c) / 2;
+  const r = Math.sqrt(p * p + d.b * d.b);
+  assert.ok(Number.isInteger(r), 'autovalores no enteros');
+  const lMax = m + r, lMin = m - r;
+  assert.ok(Number.isInteger(lMax) && lMax >= 0 && lMax <= 9, 'dígito inválido');
+
+  // chequeo numérico por fuerza bruta sobre la circunferencia
+  let mx = -Infinity, mn = Infinity;
+  for (let t = 0; t < 200000; t++) {
+    const th = (2 * Math.PI * t) / 200000, x = Math.cos(th), y = Math.sin(th);
+    const v = d.a * x * x + 2 * d.b * x * y + d.c * y * y;
+    if (v > mx) mx = v;
+    if (v < mn) mn = v;
+  }
+  assert.ok(Math.abs(mx - lMax) < 1e-6 && Math.abs(mn - lMin) < 1e-6, 'máximo/mínimo numéricos no coinciden');
+
+  const Q = poly(d.a, 2 * d.b, d.c);
+  digitos[`4|${d.id}`] = lMax;
+  claves.push(`  ${d.id}) Q = ${Q.replace(/_/g, '').replace(/\^2/g, '²')};  A = [[${d.a}, ${d.b}], [${d.b}, ${d.c}]];  autovalores ${lMin} y ${lMax};  máximo = ${lMax} (dígito), mínimo = ${lMin}`);
+
+  const enunciado =
+    `Sea \\(Q(x_1,x_2)=${Q}\\). Hallá el máximo y el mínimo de \\(Q\\) sujeto a \\(x_1^2+x_2^2=1\\).` +
+    `<br><strong>Tu dígito es el valor máximo.</strong>`;
+  return { id: d.id, enunciado, digito: lMax };
+});
+assert.equal(new Set(ej4.map((e) => e.digito)).size, ej4.length, 'ej4: dígitos repetidos');
 
 // ───────────────────────── Armado del banco público ─────────────────────────
 const variantes = (n, lista, enunciadoDe) =>
@@ -141,8 +229,8 @@ const banco = [
       `Hay un valor crítico positivo de \\(${e.inc}\\) en el que \\(S\\) deja de serlo. <strong>Tu dígito es ese valor.</strong>`),
   },
   { n: 2, titulo: 'Cambio de variable', variantes: variantes(2, ej2) },
-  { n: 3, titulo: 'Pendiente', variantes: variantes(3, ej3) },
-  { n: 4, titulo: 'Pendiente', variantes: variantes(4, ej4) },
+  { n: 3, titulo: 'Descomposición espectral', variantes: variantes(3, ej3) },
+  { n: 4, titulo: 'Optimización restringida', variantes: variantes(4, ej4) },
 ];
 
 writeFileSync(
@@ -160,15 +248,15 @@ claves.push('', 'CÓDIGO POR EQUIPO (ej.1, ej.2, ej.3, ej.4)');
 const vistos = new Set();
 for (let n = 1; n <= MAX_EQUIPOS; n++) {
   const c = codigoDe(n);
+  assert.match(c, /^\d{4}$/, `equipo ${n}: código mal formado (${c})`);
   assert.ok(!vistos.has(c), `código repetido en equipo ${n}: ${c}`);
   vistos.add(c);
   assert.ok(await Logica.verificar(n, banco, SALT, c), `equipo ${n}: el código correcto no verifica`);
   const mal = c.slice(0, 3) + String((Number(c[3]) + 1) % 10);
   assert.ok(!(await Logica.verificar(n, banco, SALT, mal)), `equipo ${n}: aceptó un código incorrecto`);
   const vs = Logica.variantesDelEquipo(n, banco);
-  claves.push(`  Equipo ${n}: ${c}   (ej.1 variante ${vs[0].id}, ej.2 variante ${vs[1].id})`);
+  claves.push(`  Equipo ${n}: ${c}   (variantes ${vs.map((v) => v.id).join(', ')})`);
 }
-claves.push('', 'Nota: los dígitos de los ejercicios 3 y 4 son provisorios (0) hasta que se carguen.');
 
 writeFileSync('claves.txt', claves.join('\n') + '\n');
 console.log(claves.join('\n'));

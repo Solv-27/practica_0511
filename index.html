@@ -4,61 +4,169 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Caja fuerte · Álgebra lineal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Figtree:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
-  :root { --bg:#f6f7fb; --card:#fff; --ink:#1d2433; --muted:#6b7385; --line:#dde1ea; --acc:#3b5bdb; --bad:#d6293e; }
+  :root {
+    --papel: #e8eef0;
+    --tinta: #13262e;
+    --suave: #51666f;
+    --linea: #c3d0d5;
+    --boveda: #0e2630;
+    --laton: #d9a53a;
+    --laton-oscuro: #8f6210;
+    --ok: #1f9d68;
+    --mal: #d9344f;
+    --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+    --texto: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
   * { box-sizing: border-box; }
-  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
-  main { max-width:780px; margin:0 auto; padding:24px 16px 64px; }
-  h1 { margin:0 0 4px; font-size:28px; }
-  header p { margin:0 0 24px; color:var(--muted); }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:16px; }
-  .ej h2 { margin:0 0 10px; font-size:18px; }
-  .ej h2 span { font-weight:400; color:var(--muted); font-size:14px; margin-left:8px; }
-  .ej ol { margin:10px 0; padding-left:22px; }
-  button { font:inherit; padding:9px 18px; border:0; border-radius:8px; background:var(--acc); color:#fff; cursor:pointer; }
-  button:hover { filter:brightness(1.08); }
-  button.link { background:none; color:var(--acc); padding:0; text-decoration:underline; }
-  input[type=number] { font:inherit; padding:8px 10px; width:120px; border:1px solid var(--line); border-radius:8px; }
-  .barra { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
-  .msg { color:var(--bad); min-height:1.4em; margin:8px 0 0; }
-  .candado h2 { margin:0 0 6px; }
-  .candado p { margin:0 0 14px; color:var(--muted); }
-  .digitos { display:flex; gap:10px; margin-bottom:16px; }
-  .digitos input { width:56px; height:64px; text-align:center; font-size:28px; border:2px solid var(--line); border-radius:10px; background:#fff; transition:border-color .15s, background .15s; }
-  .digitos input:focus { outline:none; border-color:var(--acc); }
-  .candado.mal { border-color:var(--bad); animation:temblor .35s; }
-  .candado.mal .digitos input { border-color:var(--bad); background:#fdecee; }
-  @keyframes temblor { 25% { transform:translateX(-6px); } 75% { transform:translateX(6px); } }
-  [hidden] { display:none !important; }
+  body { margin: 0; background: var(--papel); color: var(--tinta); font: 17px/1.6 var(--texto); }
+  main { max-width: 1080px; margin: 0 auto; padding: 40px 20px 80px; }
+  [hidden] { display: none !important; }
+
+  header h1 { margin: 0; font: 800 clamp(44px, 7vw, 76px)/0.95 var(--display); letter-spacing: -0.03em; }
+  header p { margin: 14px 0 0; max-width: 46ch; color: var(--suave); font-size: 19px; }
+
+  button { font: 600 17px var(--texto); border: 0; border-radius: 10px; padding: 12px 22px; cursor: pointer;
+           background: var(--laton); color: #2b1c03; transition: transform .12s, filter .12s; }
+  button:hover { filter: brightness(1.06); }
+  button:active { transform: translateY(1px); }
+  button:focus-visible, input:focus-visible { outline: 3px solid var(--tinta); outline-offset: 3px; }
+  button.link { background: none; color: var(--tinta); padding: 4px 0; text-decoration: underline; font-weight: 600; }
+
+  /* ---------- ingreso ---------- */
+  .ingreso { display: flex; align-items: center; gap: 40px; margin-top: 48px; flex-wrap: wrap; }
+  .ingreso form { flex: 1 1 280px; max-width: 360px; }
+  .ingreso label { display: block; font-weight: 600; margin-bottom: 8px; }
+  .ingreso .fila { display: flex; gap: 10px; }
+  .ingreso input { width: 130px; font: 800 28px var(--display); padding: 8px 14px; border: 2px solid var(--tinta);
+                   border-radius: 10px; background: #fff; color: var(--tinta); }
+  .error { color: var(--mal); min-height: 1.5em; margin: 10px 0 0; font-weight: 600; }
+
+  /* ---------- juego ---------- */
+  .barra { display: flex; justify-content: space-between; align-items: baseline; margin: 36px 0 8px;
+           padding-bottom: 12px; border-bottom: 2px solid var(--tinta); }
+  .barra strong { font: 800 22px var(--display); }
+  .juego { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 56px; align-items: start; }
+
+  .ej { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 18px; padding: 28px 0; border-top: 1px solid var(--linea); }
+  .ej:first-child { border-top: 0; }
+  .ej .n { font: 800 64px/0.9 var(--display); color: transparent; -webkit-text-stroke: 2px var(--laton-oscuro); }
+  .ej h2 { margin: 0; font: 800 24px/1.15 var(--display); letter-spacing: -0.01em; }
+  .ej .slot { margin: 2px 0 12px; color: var(--suave); font-size: 15px; }
+  .ej ol { margin: 10px 0; padding-left: 22px; }
+  .ej li { margin: 6px 0; }
+  .ej .enunciado { overflow-wrap: anywhere; overflow-x: auto; }
+  .ej .katex-display { overflow-x: auto; }
+
+  /* ---------- candado ---------- */
+  .boveda { position: sticky; top: 24px; background: var(--boveda); color: #e6f0f3; border-radius: 22px; padding: 26px 24px 28px; }
+  .boveda h2 { margin: 0; font: 800 26px var(--display); }
+  .boveda .ayuda { margin: 4px 0 18px; color: #93b1bc; font-size: 15px; }
+  .candado { display: block; width: 170px; margin: 0 auto 6px; overflow: visible; }
+  .candado.grande { width: 210px; margin: 0; }
+  .asa { transform-origin: 58px 118px; transition: transform .8s cubic-bezier(.3, 1.5, .5, 1); }
+  .tinte { fill: var(--mal); opacity: 0; transition: opacity .2s; }
+  .boveda.mal .tinte { opacity: .55; }
+  .boveda.abierto .tinte { fill: var(--ok); opacity: .4; }
+  .boveda.abierto .asa { transform: translateY(-8px) rotate(-30deg); }
+  .boveda.mal .candado { animation: temblor .5s; }
+  @keyframes temblor {
+    10%, 90% { transform: translateX(-2px); } 20%, 80% { transform: translateX(4px); }
+    30%, 50%, 70% { transform: translateX(-7px); } 40%, 60% { transform: translateX(7px); }
+  }
+
+  .digitos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 16px 0 20px; }
+  .dig { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .dig input { width: 100%; aspect-ratio: 3 / 4; text-align: center; font: 800 36px var(--display); color: var(--laton);
+               background: #071a22; border: 2px solid #2b4a57; border-radius: 12px; caret-color: var(--laton);
+               transition: border-color .2s, background .2s, color .2s; }
+  .dig input:focus-visible { outline-color: var(--laton); }
+  .dig label { font-size: 14px; color: #93b1bc; }
+  .boveda.mal .dig input { border-color: var(--mal); background: #2b0f18; color: #ff9aab; }
+  .boveda.abierto .dig input { border-color: var(--ok); }
+  .boveda button { width: 100%; }
+  .aviso { margin: 10px 0 0; color: #ff9aab; min-height: 1.4em; font-size: 15px; }
+
+  @media (max-width: 860px) {
+    .juego { grid-template-columns: 1fr; gap: 24px; }
+    .boveda { position: static; }
+    .ej { grid-template-columns: 48px minmax(0, 1fr); }
+    .ej .n { font-size: 44px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .asa, .tinte { transition: none; }
+    .boveda.mal .candado { animation: none; }
+  }
 </style>
 </head>
 <body>
+<!-- Gradientes compartidos por todos los candados de la página -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="gAcero" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef4f6"/><stop offset=".45" stop-color="#a3b7c0"/><stop offset="1" stop-color="#5b7480"/>
+    </linearGradient>
+    <linearGradient id="gLaton" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4cd69"/><stop offset=".55" stop-color="#d9a53a"/><stop offset="1" stop-color="#a06d16"/>
+    </linearGradient>
+  </defs>
+</svg>
+
 <main>
   <header>
     <h1>Caja fuerte</h1>
-    <p>Diagonalización ortogonal y formas cuadráticas</p>
+    <p>Resolvé los cuatro ejercicios. Cada uno te da un dígito del código.</p>
   </header>
 
-  <section id="login" class="card">
-    <label for="num"><strong>Número de equipo</strong></label><br>
-    <input id="num" type="number" min="1" inputmode="numeric" style="margin:8px 8px 0 0">
-    <button id="entrar">Entrar</button>
-    <p id="errLogin" class="msg"></p>
+  <section id="login" class="ingreso">
+    <svg class="candado grande" viewBox="0 -24 200 274" role="img" aria-label="Candado cerrado">
+      <ellipse cx="100" cy="240" rx="68" ry="8" fill="#13262e" opacity=".16"/>
+      <g class="asa"><path d="M58 118V76a42 42 0 0 1 84 0v42" fill="none" stroke="url(#gAcero)" stroke-width="18" stroke-linecap="round"/></g>
+      <rect x="28" y="112" width="144" height="120" rx="20" fill="url(#gLaton)"/>
+      <rect x="37" y="121" width="126" height="102" rx="14" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="2"/>
+      <path d="M44 126h112" stroke="#fff" stroke-opacity=".35" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="46" cy="214" r="3.5" fill="#7a520e"/><circle cx="154" cy="214" r="3.5" fill="#7a520e"/>
+      <circle cx="100" cy="162" r="13" fill="#3a2706"/><path d="M93 168h14l4 30H89z" fill="#3a2706"/>
+      <rect class="tinte" x="28" y="112" width="144" height="120" rx="20"/>
+    </svg>
+    <form id="formLogin" novalidate>
+      <label for="num">Número de equipo</label>
+      <div class="fila">
+        <input id="num" type="number" min="1" inputmode="numeric" autocomplete="off">
+        <button id="entrar" type="submit">Entrar</button>
+      </div>
+      <p id="errLogin" class="error" role="alert"></p>
+    </form>
   </section>
 
   <section id="juego" hidden>
     <div class="barra">
       <span>Equipo <strong id="eq"></strong></span>
-      <button id="cambiar" class="link">Cambiar de equipo</button>
+      <button id="cambiar" class="link" type="button">Cambiar de equipo</button>
     </div>
-    <div id="ejercicios"></div>
-    <div id="candado" class="card candado">
-      <h2>Candado</h2>
-      <p>Un dígito por ejercicio, en orden: ejercicio 1, 2, 3 y 4.</p>
-      <div id="digitos" class="digitos"></div>
-      <button id="probar">Probar código</button>
-      <p id="aviso" class="msg"></p>
+    <div class="juego">
+      <div id="ejercicios"></div>
+      <aside id="boveda" class="boveda" aria-label="Candado">
+        <svg class="candado" viewBox="0 -24 200 274" role="img" aria-label="Candado">
+          <ellipse cx="100" cy="240" rx="68" ry="8" fill="#000" opacity=".3"/>
+          <g class="asa"><path d="M58 118V76a42 42 0 0 1 84 0v42" fill="none" stroke="url(#gAcero)" stroke-width="18" stroke-linecap="round"/></g>
+          <rect x="28" y="112" width="144" height="120" rx="20" fill="url(#gLaton)"/>
+          <rect x="37" y="121" width="126" height="102" rx="14" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="2"/>
+          <path d="M44 126h112" stroke="#fff" stroke-opacity=".35" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="46" cy="214" r="3.5" fill="#7a520e"/><circle cx="154" cy="214" r="3.5" fill="#7a520e"/>
+          <circle cx="100" cy="162" r="13" fill="#3a2706"/><path d="M93 168h14l4 30H89z" fill="#3a2706"/>
+          <rect class="tinte" x="28" y="112" width="144" height="120" rx="20"/>
+        </svg>
+        <h2>Candado</h2>
+        <p class="ayuda">Un dígito por ejercicio, en orden.</p>
+        <div id="digitos" class="digitos"></div>
+        <button id="probar" type="button">Abrir candado</button>
+        <p id="aviso" class="aviso" role="alert"></p>
+      </aside>
     </div>
   </section>
 </main>
@@ -72,6 +180,8 @@
   var $ = function (id) { return document.getElementById(id); };
   var MAX = window.CONFIG.MAX_EQUIPOS;
   var equipo = null;
+  var ocupado = false;
+  var reducir = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function mate() {
     if (!window.renderMathInElement) return;
@@ -88,10 +198,17 @@
   // ---- candado: un input por dígito ----
   var caja = $('digitos');
   for (var k = 0; k < window.BANCO.length; k++) {
+    var wrap = document.createElement('div');
+    wrap.className = 'dig';
     var i = document.createElement('input');
     i.type = 'text'; i.inputMode = 'numeric'; i.maxLength = 1; i.autocomplete = 'off';
-    i.setAttribute('aria-label', 'Dígito ' + (k + 1));
-    caja.appendChild(i);
+    i.id = 'dig' + (k + 1);
+    var l = document.createElement('label');
+    l.htmlFor = i.id;
+    l.textContent = 'Ej. ' + (k + 1);
+    wrap.appendChild(i);
+    wrap.appendChild(l);
+    caja.appendChild(wrap);
   }
   var ins = Array.prototype.slice.call(caja.querySelectorAll('input'));
   ins.forEach(function (inp, k) {
@@ -113,15 +230,20 @@
   });
 
   function probar() {
+    if (ocupado) return;
     $('aviso').textContent = '';
     var codigo = ins.map(function (x) { return x.value; }).join('');
     window.Logica.verificar(equipo, window.BANCO, window.CONFIG.SALT, codigo).then(function (ok) {
+      var b = $('boveda');
       if (ok) {
-        location.href = 'felicitaciones.html?equipo=' + equipo;
+        ocupado = true;
+        b.classList.add('abierto');
+        setTimeout(function () { location.href = 'felicitaciones.html?equipo=' + equipo; }, reducir ? 200 : 1000);
       } else {
-        var c = $('candado');
-        c.classList.add('mal');
-        setTimeout(function () { c.classList.remove('mal'); }, 900);
+        b.classList.remove('mal');
+        void b.offsetWidth; // reinicia la animación si se erra dos veces seguidas
+        b.classList.add('mal');
+        setTimeout(function () { b.classList.remove('mal'); }, 900);
       }
     }).catch(function () {
       $('aviso').textContent = 'Este navegador no puede verificar el código. Abrí la página por https.';
@@ -140,9 +262,11 @@
     cont.innerHTML = '';
     window.Logica.variantesDelEquipo(n, window.BANCO).forEach(function (v, k) {
       var art = document.createElement('article');
-      art.className = 'card ej';
-      art.innerHTML = '<h2>Ejercicio ' + (k + 1) + '<span>' + window.BANCO[k].titulo + '</span></h2>' +
-                      '<div class="enunciado">' + v.enunciado + '</div>';
+      art.className = 'ej';
+      art.innerHTML = '<div class="n" aria-hidden="true">' + (k + 1) + '</div>' +
+                      '<div><h2>' + window.BANCO[k].titulo + '</h2>' +
+                      '<p class="slot">Dígito ' + (k + 1) + ' del código</p>' +
+                      '<div class="enunciado">' + v.enunciado + '</div></div>';
       cont.appendChild(art);
     });
     ins.forEach(function (x) { x.value = ''; });
@@ -165,7 +289,8 @@
     return n >= 1 && n <= MAX ? n : null;
   }
 
-  function intentarEntrar() {
+  $('formLogin').addEventListener('submit', function (e) {
+    e.preventDefault();
     var n = parseInt($('num').value, 10);
     if (!(n >= 1 && n <= MAX)) {
       $('errLogin').textContent = 'Ingresá un número de equipo entre 1 y ' + MAX + '.';
@@ -173,9 +298,7 @@
     }
     $('errLogin').textContent = '';
     entrar(n);
-  }
-  $('entrar').addEventListener('click', intentarEntrar);
-  $('num').addEventListener('keydown', function (e) { if (e.key === 'Enter') intentarEntrar(); });
+  });
   $('cambiar').addEventListener('click', salir);
 
   var guardado = leerEquipo();

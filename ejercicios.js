@@ -55,23 +55,53 @@ window.BANCO = [
   },
   {
     "n": 3,
-    "titulo": "Pendiente",
+    "titulo": "Descomposición espectral",
     "variantes": [
       {
-        "id": "p",
-        "enunciado": "<em>Ejercicio 3: pendiente de cargar.</em> Por ahora su dígito es <strong>0</strong>.",
-        "hash": "ffb8c8eb81c87f47b7792908f6f5b404e860bb9214420343fa64b1bf39b5f7c2"
+        "id": "a",
+        "enunciado": "Sea \\(A=\\begin{bmatrix}3&1&0\\\\1&3&0\\\\0&0&1\\end{bmatrix}\\).<ol><li>Hallá una matriz ortogonal \\(P\\) y una matriz diagonal \\(D\\) tales que \\(A=PDP^{T}\\), con los autovalores de menor a mayor en \\(D\\).</li><li>Escribí la descomposición espectral \\(A=\\lambda_1u_1u_1^{T}+\\lambda_2u_2u_2^{T}+\\lambda_3u_3u_3^{T}\\).</li></ol><strong>Tu dígito es la entrada \\((1,2)\\) de \\(\\lambda_3u_3u_3^{T}\\).</strong>",
+        "hash": "1d4aa721ad4c81cd1327f580a87e36b1f89a7fb6415324b7868602c050b5bb44"
+      },
+      {
+        "id": "b",
+        "enunciado": "Sea \\(A=\\begin{bmatrix}4&0&2\\\\0&3&0\\\\2&0&4\\end{bmatrix}\\).<ol><li>Hallá una matriz ortogonal \\(P\\) y una matriz diagonal \\(D\\) tales que \\(A=PDP^{T}\\), con los autovalores de menor a mayor en \\(D\\).</li><li>Escribí la descomposición espectral \\(A=\\lambda_1u_1u_1^{T}+\\lambda_2u_2u_2^{T}+\\lambda_3u_3u_3^{T}\\).</li></ol><strong>Tu dígito es la entrada \\((1,3)\\) de \\(\\lambda_3u_3u_3^{T}\\).</strong>",
+        "hash": "3b45b34e0fd10e6e39c4a6bac573e3720ac661eee45276d4c375ad91446c3a64"
+      },
+      {
+        "id": "c",
+        "enunciado": "Sea \\(A=\\begin{bmatrix}4&0&0\\\\0&5&3\\\\0&3&5\\end{bmatrix}\\).<ol><li>Hallá una matriz ortogonal \\(P\\) y una matriz diagonal \\(D\\) tales que \\(A=PDP^{T}\\), con los autovalores de menor a mayor en \\(D\\).</li><li>Escribí la descomposición espectral \\(A=\\lambda_1u_1u_1^{T}+\\lambda_2u_2u_2^{T}+\\lambda_3u_3u_3^{T}\\).</li></ol><strong>Tu dígito es la entrada \\((2,3)\\) de \\(\\lambda_3u_3u_3^{T}\\).</strong>",
+        "hash": "d186e60adffcc3835dfab6e4f7d0fc87949ae81496789116630f57682dece2fb"
+      },
+      {
+        "id": "d",
+        "enunciado": "Sea \\(A=\\begin{bmatrix}6&4&0\\\\4&6&0\\\\0&0&5\\end{bmatrix}\\).<ol><li>Hallá una matriz ortogonal \\(P\\) y una matriz diagonal \\(D\\) tales que \\(A=PDP^{T}\\), con los autovalores de menor a mayor en \\(D\\).</li><li>Escribí la descomposición espectral \\(A=\\lambda_1u_1u_1^{T}+\\lambda_2u_2u_2^{T}+\\lambda_3u_3u_3^{T}\\).</li></ol><strong>Tu dígito es la entrada \\((1,2)\\) de \\(\\lambda_3u_3u_3^{T}\\).</strong>",
+        "hash": "84df16cb671d7a265f1eeba5f440af03aeaa0ffef885e2c06a2429555c4cdd6f"
       }
     ]
   },
   {
     "n": 4,
-    "titulo": "Pendiente",
+    "titulo": "Optimización restringida",
     "variantes": [
       {
-        "id": "p",
-        "enunciado": "<em>Ejercicio 4: pendiente de cargar.</em> Por ahora su dígito es <strong>0</strong>.",
-        "hash": "168183d4df0051394119b7c7cbe8007e08b8ef7c4e96d6a08f969edd199be014"
+        "id": "a",
+        "enunciado": "Sea \\(Q(x_1,x_2)=4x_1^2 + 8x_1x_2 - 2x_2^2\\). Hallá el máximo y el mínimo de \\(Q\\) sujeto a \\(x_1^2+x_2^2=1\\).<br><strong>Tu dígito es el valor máximo.</strong>",
+        "hash": "03eebca8e039c314d61318ce7050a72ed92c1cc6a51efc20f1a4f12810655121"
+      },
+      {
+        "id": "b",
+        "enunciado": "Sea \\(Q(x_1,x_2)=6x_1^2 + 6x_1x_2 - 2x_2^2\\). Hallá el máximo y el mínimo de \\(Q\\) sujeto a \\(x_1^2+x_2^2=1\\).<br><strong>Tu dígito es el valor máximo.</strong>",
+        "hash": "a447e99a7028d03731e26e381b7376ffca73a08123ca8c5a5fdcb1f09c333cd2"
+      },
+      {
+        "id": "c",
+        "enunciado": "Sea \\(Q(x_1,x_2)=6x_1^2 + 8x_1x_2\\). Hallá el máximo y el mínimo de \\(Q\\) sujeto a \\(x_1^2+x_2^2=1\\).<br><strong>Tu dígito es el valor máximo.</strong>",
+        "hash": "7d350df1a7a3dee1cf0d18fb1c54beaa6cf266ee8092dac1a85ef9f052216c3f"
+      },
+      {
+        "id": "d",
+        "enunciado": "Sea \\(Q(x_1,x_2)=8x_1^2 + 6x_1x_2\\). Hallá el máximo y el mínimo de \\(Q\\) sujeto a \\(x_1^2+x_2^2=1\\).<br><strong>Tu dígito es el valor máximo.</strong>",
+        "hash": "c054190b9abd23f7a3237d37eebd2d7350db5bbb1cd3d2e105a088a3b17d6ba8"
       }
     ]
   }

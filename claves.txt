@@ -22,16 +22,30 @@ EJERCICIO 2 (dígito = y1, primera coordenada de P^T x0)
      P = (1/5)·[[4, 3], [-3, 4]]  (columnas: v1 para -30, v2 para -5)
      nueva forma: -30·y1² + -5·y2²;  x0 = (9,-3) -> y0 = (9, 3);  dígito = 9
 
-CÓDIGO POR EQUIPO (ej.1, ej.2, ej.3, ej.4)
-  Equipo 1: 3700   (ej.1 variante a, ej.2 variante a)
-  Equipo 2: 8200   (ej.1 variante b, ej.2 variante b)
-  Equipo 3: 6500   (ej.1 variante c, ej.2 variante c)
-  Equipo 4: 4900   (ej.1 variante d, ej.2 variante d)
-  Equipo 5: 3200   (ej.1 variante a, ej.2 variante b)
-  Equipo 6: 8500   (ej.1 variante b, ej.2 variante c)
-  Equipo 7: 6900   (ej.1 variante c, ej.2 variante d)
-  Equipo 8: 4700   (ej.1 variante d, ej.2 variante a)
-  Equipo 9: 3500   (ej.1 variante a, ej.2 variante c)
-  Equipo 10: 8900   (ej.1 variante b, ej.2 variante d)
+EJERCICIO 3 (dígito = entrada (i,j) del término del mayor autovalor)
+  a) A = [[3, 1, 0], [1, 3, 0], [0, 0, 1]], autovalores 1, 2, 4
+     mayor autovalor = 4, u = (e1+e2)/√2;  término = 4/2·(1 en las posiciones (1,1), (1,2), (2,1), (2,2));  dígito = entrada (1,2) = 2
+  b) A = [[4, 0, 2], [0, 3, 0], [2, 0, 4]], autovalores 2, 3, 6
+     mayor autovalor = 6, u = (e1+e3)/√2;  término = 6/2·(1 en las posiciones (1,1), (1,3), (3,1), (3,3));  dígito = entrada (1,3) = 3
+  c) A = [[4, 0, 0], [0, 5, 3], [0, 3, 5]], autovalores 2, 4, 8
+     mayor autovalor = 8, u = (e2+e3)/√2;  término = 8/2·(1 en las posiciones (2,2), (2,3), (3,2), (3,3));  dígito = entrada (2,3) = 4
+  d) A = [[6, 4, 0], [4, 6, 0], [0, 0, 5]], autovalores 2, 5, 10
+     mayor autovalor = 10, u = (e1+e2)/√2;  término = 10/2·(1 en las posiciones (1,1), (1,2), (2,1), (2,2));  dígito = entrada (1,2) = 5
 
-Nota: los dígitos de los ejercicios 3 y 4 son provisorios (0) hasta que se carguen.
+EJERCICIO 4 (dígito = máximo de Q con x1²+x2²=1)
+  a) Q = 4x1² + 8x1x2 - 2x2²;  A = [[4, 4], [4, -2]];  autovalores -4 y 6;  máximo = 6 (dígito), mínimo = -4
+  b) Q = 6x1² + 6x1x2 - 2x2²;  A = [[6, 3], [3, -2]];  autovalores -3 y 7;  máximo = 7 (dígito), mínimo = -3
+  c) Q = 6x1² + 8x1x2;  A = [[6, 4], [4, 0]];  autovalores -2 y 8;  máximo = 8 (dígito), mínimo = -2
+  d) Q = 8x1² + 6x1x2;  A = [[8, 3], [3, 0]];  autovalores -1 y 9;  máximo = 9 (dígito), mínimo = -1
+
+CÓDIGO POR EQUIPO (ej.1, ej.2, ej.3, ej.4)
+  Equipo 1: 3726   (variantes a, a, a, a)
+  Equipo 2: 8237   (variantes b, b, b, b)
+  Equipo 3: 6548   (variantes c, c, c, c)
+  Equipo 4: 4959   (variantes d, d, d, d)
+  Equipo 5: 3226   (variantes a, b, a, a)
+  Equipo 6: 8537   (variantes b, c, b, b)
+  Equipo 7: 6948   (variantes c, d, c, c)
+  Equipo 8: 4759   (variantes d, a, d, d)
+  Equipo 9: 3526   (variantes a, c, a, a)
+  Equipo 10: 8937   (variantes b, d, b, b)
