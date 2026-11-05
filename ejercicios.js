@@ -55,52 +55,52 @@ window.BANCO = [
   },
   {
     "n": 3,
-    "titulo": "Descomposición espectral",
+    "titulo": "Diagonalización ortogonal",
     "variantes": [
       {
         "id": "a",
-        "enunciado": "Sea \\(A=\\begin{bmatrix}3&1&0\\\\1&3&0\\\\0&0&1\\end{bmatrix}\\).<ol><li>Hallá una matriz ortogonal \\(P\\) y una matriz diagonal \\(D\\) tales que \\(A=PDP^{T}\\), con los autovalores de menor a mayor en \\(D\\).</li><li>Escribí la descomposición espectral \\(A=\\lambda_1u_1u_1^{T}+\\lambda_2u_2u_2^{T}+\\lambda_3u_3u_3^{T}\\).</li></ol><strong>Tu dígito es la entrada \\((1,2)\\) de \\(\\lambda_3u_3u_3^{T}\\).</strong>",
-        "hash": "1d4aa721ad4c81cd1327f580a87e36b1f89a7fb6415324b7868602c050b5bb44"
+        "enunciado": "Sea \\(A=\\begin{bmatrix}18&-12&0\\\\-12&11&0\\\\0&0&10\\end{bmatrix}\\).<br>Hallá una matriz ortogonal \\(P\\) y una matriz diagonal \\(D\\) tales que \\(A=PDP^{T}\\). Convención para que \\(P\\) sea única: los autovalores van de menor a mayor en \\(D\\) (una columna de \\(P\\) por autovalor) y cada columna de \\(P\\) tiene su primera componente no nula positiva.<br><strong>Tu dígito es \\(5p\\), donde \\(p\\) es la entrada de la fila 2 y columna 1 de \\(P\\).</strong>",
+        "hash": "ba7f6d23ff6ef15eb77264106f1e2f0ea3b7f0ce9076e9c5dcfccdfa6525a1b6"
       },
       {
         "id": "b",
-        "enunciado": "Sea \\(A=\\begin{bmatrix}4&0&2\\\\0&3&0\\\\2&0&4\\end{bmatrix}\\).<ol><li>Hallá una matriz ortogonal \\(P\\) y una matriz diagonal \\(D\\) tales que \\(A=PDP^{T}\\), con los autovalores de menor a mayor en \\(D\\).</li><li>Escribí la descomposición espectral \\(A=\\lambda_1u_1u_1^{T}+\\lambda_2u_2u_2^{T}+\\lambda_3u_3u_3^{T}\\).</li></ol><strong>Tu dígito es la entrada \\((1,3)\\) de \\(\\lambda_3u_3u_3^{T}\\).</strong>",
+        "enunciado": "Sea \\(A=\\begin{bmatrix}-20&0&0\\\\0&-1&-12\\\\0&-12&6\\end{bmatrix}\\).<br>Hallá una matriz ortogonal \\(P\\) y una matriz diagonal \\(D\\) tales que \\(A=PDP^{T}\\). Convención para que \\(P\\) sea única: los autovalores van de menor a mayor en \\(D\\) (una columna de \\(P\\) por autovalor) y cada columna de \\(P\\) tiene su primera componente no nula positiva.<br><strong>Tu dígito es \\(5p\\), donde \\(p\\) es la entrada de la fila 3 y columna 2 de \\(P\\).</strong>",
         "hash": "3b45b34e0fd10e6e39c4a6bac573e3720ac661eee45276d4c375ad91446c3a64"
       },
       {
         "id": "c",
-        "enunciado": "Sea \\(A=\\begin{bmatrix}4&0&0\\\\0&5&3\\\\0&3&5\\end{bmatrix}\\).<ol><li>Hallá una matriz ortogonal \\(P\\) y una matriz diagonal \\(D\\) tales que \\(A=PDP^{T}\\), con los autovalores de menor a mayor en \\(D\\).</li><li>Escribí la descomposición espectral \\(A=\\lambda_1u_1u_1^{T}+\\lambda_2u_2u_2^{T}+\\lambda_3u_3u_3^{T}\\).</li></ol><strong>Tu dígito es la entrada \\((2,3)\\) de \\(\\lambda_3u_3u_3^{T}\\).</strong>",
+        "enunciado": "Sea \\(A=\\begin{bmatrix}17&0&12\\\\0&30&0\\\\12&0&10\\end{bmatrix}\\).<br>Hallá una matriz ortogonal \\(P\\) y una matriz diagonal \\(D\\) tales que \\(A=PDP^{T}\\). Convención para que \\(P\\) sea única: los autovalores van de menor a mayor en \\(D\\) (una columna de \\(P\\) por autovalor) y cada columna de \\(P\\) tiene su primera componente no nula positiva.<br><strong>Tu dígito es \\(5p\\), donde \\(p\\) es la entrada de la fila 1 y columna 2 de \\(P\\).</strong>",
         "hash": "d186e60adffcc3835dfab6e4f7d0fc87949ae81496789116630f57682dece2fb"
       },
       {
         "id": "d",
-        "enunciado": "Sea \\(A=\\begin{bmatrix}6&4&0\\\\4&6&0\\\\0&0&5\\end{bmatrix}\\).<ol><li>Hallá una matriz ortogonal \\(P\\) y una matriz diagonal \\(D\\) tales que \\(A=PDP^{T}\\), con los autovalores de menor a mayor en \\(D\\).</li><li>Escribí la descomposición espectral \\(A=\\lambda_1u_1u_1^{T}+\\lambda_2u_2u_2^{T}+\\lambda_3u_3u_3^{T}\\).</li></ol><strong>Tu dígito es la entrada \\((1,2)\\) de \\(\\lambda_3u_3u_3^{T}\\).</strong>",
-        "hash": "84df16cb671d7a265f1eeba5f440af03aeaa0ffef885e2c06a2429555c4cdd6f"
+        "enunciado": "Sea \\(A=\\begin{bmatrix}-21&12&0\\\\12&-14&0\\\\0&0&-12\\end{bmatrix}\\).<br>Hallá una matriz ortogonal \\(P\\) y una matriz diagonal \\(D\\) tales que \\(A=PDP^{T}\\). Convención para que \\(P\\) sea única: los autovalores van de menor a mayor en \\(D\\) (una columna de \\(P\\) por autovalor) y cada columna de \\(P\\) tiene su primera componente no nula positiva.<br><strong>Tu dígito es \\(5p\\), donde \\(p\\) es la entrada de la fila 1 y columna 3 de \\(P\\).</strong>",
+        "hash": "09110b0cb6c8341e95ab45b381d1f1b770cf7a1c431a50cad010a159da106650"
       }
     ]
   },
   {
     "n": 4,
-    "titulo": "Optimización restringida",
+    "titulo": "Máximo y mínimo de Q",
     "variantes": [
       {
         "id": "a",
-        "enunciado": "Sea \\(Q(x_1,x_2)=4x_1^2 + 8x_1x_2 - 2x_2^2\\). Hallá el máximo y el mínimo de \\(Q\\) sujeto a \\(x_1^2+x_2^2=1\\).<br><strong>Tu dígito es el valor máximo.</strong>",
+        "enunciado": "Sea \\(Q(x_1,x_2)=4x_1^2 + 8x_1x_2 - 2x_2^2\\). Considerá solo los vectores \\(\\mathbf{x}=(x_1,x_2)\\) de norma 1, es decir, con \\(x_1^2+x_2^2=1\\). Entre todos ellos, hallá el mayor y el menor valor que toma \\(Q\\).<br>Pista: \\(Q(\\mathbf{x})=\\mathbf{x}^{T}A\\mathbf{x}\\) con \\(A\\) simétrica.<br><strong>Tu dígito es el mayor valor.</strong>",
         "hash": "03eebca8e039c314d61318ce7050a72ed92c1cc6a51efc20f1a4f12810655121"
       },
       {
         "id": "b",
-        "enunciado": "Sea \\(Q(x_1,x_2)=6x_1^2 + 6x_1x_2 - 2x_2^2\\). Hallá el máximo y el mínimo de \\(Q\\) sujeto a \\(x_1^2+x_2^2=1\\).<br><strong>Tu dígito es el valor máximo.</strong>",
+        "enunciado": "Sea \\(Q(x_1,x_2)=6x_1^2 + 6x_1x_2 - 2x_2^2\\). Considerá solo los vectores \\(\\mathbf{x}=(x_1,x_2)\\) de norma 1, es decir, con \\(x_1^2+x_2^2=1\\). Entre todos ellos, hallá el mayor y el menor valor que toma \\(Q\\).<br>Pista: \\(Q(\\mathbf{x})=\\mathbf{x}^{T}A\\mathbf{x}\\) con \\(A\\) simétrica.<br><strong>Tu dígito es el mayor valor.</strong>",
         "hash": "a447e99a7028d03731e26e381b7376ffca73a08123ca8c5a5fdcb1f09c333cd2"
       },
       {
         "id": "c",
-        "enunciado": "Sea \\(Q(x_1,x_2)=6x_1^2 + 8x_1x_2\\). Hallá el máximo y el mínimo de \\(Q\\) sujeto a \\(x_1^2+x_2^2=1\\).<br><strong>Tu dígito es el valor máximo.</strong>",
+        "enunciado": "Sea \\(Q(x_1,x_2)=6x_1^2 + 8x_1x_2\\). Considerá solo los vectores \\(\\mathbf{x}=(x_1,x_2)\\) de norma 1, es decir, con \\(x_1^2+x_2^2=1\\). Entre todos ellos, hallá el mayor y el menor valor que toma \\(Q\\).<br>Pista: \\(Q(\\mathbf{x})=\\mathbf{x}^{T}A\\mathbf{x}\\) con \\(A\\) simétrica.<br><strong>Tu dígito es el mayor valor.</strong>",
         "hash": "7d350df1a7a3dee1cf0d18fb1c54beaa6cf266ee8092dac1a85ef9f052216c3f"
       },
       {
         "id": "d",
-        "enunciado": "Sea \\(Q(x_1,x_2)=8x_1^2 + 6x_1x_2\\). Hallá el máximo y el mínimo de \\(Q\\) sujeto a \\(x_1^2+x_2^2=1\\).<br><strong>Tu dígito es el valor máximo.</strong>",
+        "enunciado": "Sea \\(Q(x_1,x_2)=8x_1^2 + 6x_1x_2\\). Considerá solo los vectores \\(\\mathbf{x}=(x_1,x_2)\\) de norma 1, es decir, con \\(x_1^2+x_2^2=1\\). Entre todos ellos, hallá el mayor y el menor valor que toma \\(Q\\).<br>Pista: \\(Q(\\mathbf{x})=\\mathbf{x}^{T}A\\mathbf{x}\\) con \\(A\\) simétrica.<br><strong>Tu dígito es el mayor valor.</strong>",
         "hash": "c054190b9abd23f7a3237d37eebd2d7350db5bbb1cd3d2e105a088a3b17d6ba8"
       }
     ]

@@ -113,66 +113,70 @@ const ej2 = ej2defs.map((d) => {
 });
 assert.equal(new Set(ej2.map((e) => e.digito)).size, ej2.length, 'ej2: dígitos repetidos');
 
-// ───────────────── Ejercicio 3: descomposición espectral (3×3 con un bloque 2×2) ─────────────────
-// A tiene un bloque [[a,b],[b,a]] en las coordenadas i,j y el valor c en la coordenada k.
-// Autovalores: a-b (u=(e_i-e_j)/√2), a+b (u=(e_i+e_j)/√2) y c (u=e_k).
-// Dígito: entrada (i,j) del término del mayor autovalor, (a+b)·u·uᵀ  ->  (a+b)/2.
+// ───────────────── Ejercicio 3: diagonalización ortogonal (3×3 con un bloque 2×2) ─────────────────
+// Bloque 2×2 en las coordenadas par=[i,j] con autovectores (p,q)/5 y su ortogonal (autovalores l1<l2,
+// con l2-l1 múltiplo de 25 para que A sea entera). La coordenada restante k tiene autovalor c.
+// Dígito: 5·P[fila][col], con P de columnas ordenadas por autovalor creciente y 1ª componente no nula > 0.
 const bm3 = (M) => `\\begin{bmatrix}${M.map((r) => r.join('&')).join('\\\\')}\\end{bmatrix}`;
 
 const ej3defs = [
-  { id: 'a', par: [0, 1], a: 3, b: 1, c: 1 },
-  { id: 'b', par: [0, 2], a: 4, b: 2, c: 3 },
-  { id: 'c', par: [1, 2], a: 5, b: 3, c: 4 },
-  { id: 'd', par: [0, 1], a: 6, b: 4, c: 5 },
+  { id: 'a', par: [0, 1], v1: [3, 4], l1: 2, l2: 27, c: 10, lee: [2, 1] },
+  { id: 'b', par: [1, 2], v1: [4, 3], l1: -10, l2: 15, c: -20, lee: [3, 2] },
+  { id: 'c', par: [0, 2], v1: [3, -4], l1: 1, l2: 26, c: 30, lee: [1, 2] },
+  { id: 'd', par: [0, 1], v1: [4, -3], l1: -30, l2: -5, c: -12, lee: [1, 3] },
 ];
 
-claves.push('', 'EJERCICIO 3 (dígito = entrada (i,j) del término del mayor autovalor)');
+claves.push('', 'EJERCICIO 3 (dígito = 5·entrada (fila,col) de P; autovalores crecientes, 1ª componente no nula > 0)');
 const ej3 = ej3defs.map((d) => {
   const [i, j] = d.par;
   const k = [0, 1, 2].find((x) => x !== i && x !== j);
-  const A = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
-  A[i][i] = d.a; A[j][j] = d.a; A[i][j] = d.b; A[j][i] = d.b; A[k][k] = d.c;
+  const [p, q] = d.v1;
+  assert.equal(p * p + q * q, 25);
+  assert.ok(d.l1 < d.l2 && (d.l2 - d.l1) % 25 === 0, 'l2-l1 debe ser múltiplo de 25');
+  assert.equal(new Set([d.l1, d.l2, d.c]).size, 3, 'autovalores distintos');
+  const v2 = q > 0 ? [q, -p] : [-q, p];
 
-  const lMas = d.a + d.b, lMenos = d.a - d.b;
-  assert.ok(d.b > 0, 'b > 0 para que el autovector del mayor sea (e_i+e_j)');
-  assert.ok(lMas > d.c && lMas > lMenos, 'el mayor autovalor debe estar en el bloque');
-  assert.equal(new Set([lMas, lMenos, d.c]).size, 3, 'autovalores distintos');
+  // autovectores enteros de norma 5, ordenados por autovalor creciente
+  const vec = (a, b) => { const w = [0, 0, 0]; w[i] = a; w[j] = b; return w; };
+  const e5 = [0, 0, 0]; e5[k] = 5;
+  const pares = [{ l: d.l1, w: vec(p, q) }, { l: d.l2, w: vec(v2[0], v2[1]) }, { l: d.c, w: e5 }]
+    .sort((x, y) => x.l - y.l);
 
-  // Verificación con vectores enteros: A w = λ w
-  const mul = (v) => A.map((row) => row.reduce((s, x, t) => s + x * v[t], 0));
-  const e = (n) => [0, 1, 2].map((t) => (t === n ? 1 : 0));
-  const wMas = e(i).map((x, t) => x + e(j)[t]);
-  const wMenos = e(i).map((x, t) => x - e(j)[t]);
-  assert.deepEqual(mul(wMas), wMas.map((x) => lMas * x), 'A w+ != (a+b) w+');
-  assert.deepEqual(mul(wMenos), wMenos.map((x) => lMenos * x), 'A w- != (a-b) w-');
-  assert.deepEqual(mul(e(k)), e(k).map((x) => d.c * x), 'A e_k != c e_k');
-
-  // 2A = (a+b) w+w+ᵀ + (a-b) w-w-ᵀ + 2c e_k e_kᵀ   (los w tienen norma² = 2)
-  for (let r = 0; r < 3; r++) {
-    for (let s = 0; s < 3; s++) {
-      const suma = lMas * wMas[r] * wMas[s] + lMenos * wMenos[r] * wMenos[s] + 2 * d.c * e(k)[r] * e(k)[s];
-      assert.equal(suma, 2 * A[r][s], `descomposición espectral falla en (${r},${s})`);
-    }
+  // A = Σ l·w·wᵀ / 25
+  const A = [0, 1, 2].map((r) => [0, 1, 2].map((s) => {
+    const num = pares.reduce((t, pr) => t + pr.l * pr.w[r] * pr.w[s], 0);
+    assert.ok(num % 25 === 0, 'A no es entera');
+    return num / 25;
+  }));
+  for (const pr of pares) {
+    const Aw = A.map((row) => row.reduce((t, x, s) => t + x * pr.w[s], 0));
+    assert.deepEqual(Aw.map((x) => x + 0), pr.w.map((x) => pr.l * x + 0), 'A w != l w'); // "+ 0" evita -0 vs 0
+    assert.ok(pr.w.find((x) => x !== 0) > 0, 'convención de signo');
   }
+  // columnas ortogonales entre sí
+  for (let a = 0; a < 3; a++) for (let b = a + 1; b < 3; b++)
+    assert.equal(pares[a].w.reduce((t, x, s) => t + x * pares[b].w[s], 0), 0, 'columnas no ortogonales');
 
-  const termino = (lMas * wMas[i] * wMas[j]) / 2; // (a+b)·(1/√2)(1/√2)
-  assert.ok(Number.isInteger(termino) && termino >= 0 && termino <= 9, 'dígito inválido');
-  digitos[`3|${d.id}`] = termino;
-  const fila = (M) => '[' + M.map((r) => '[' + r.join(', ') + ']').join(', ') + ']';
+  const [r, s] = d.lee;
+  const digito = pares[s - 1].w[r - 1]; // 5·P[r][s] = w[r] (w tiene norma 5)
+  assert.ok(Number.isInteger(digito) && digito > 0 && digito <= 9, 'dígito inválido');
+  digitos[`3|${d.id}`] = digito;
+
+  const fila = (M) => '[' + M.map((rw) => '[' + rw.join(', ') + ']').join(', ') + ']';
+  const col = (w) => `(${w.join(', ')})/5`;
   claves.push(
-    `  ${d.id}) A = ${fila(A)}, autovalores ${[lMenos, lMas, d.c].sort((x, y) => x - y).join(', ')}`,
-    `     mayor autovalor = ${lMas}, u = (e${i + 1}+e${j + 1})/√2;  término = ${lMas}/2·(1 en las posiciones (${i + 1},${i + 1}), (${i + 1},${j + 1}), (${j + 1},${i + 1}), (${j + 1},${j + 1}));  dígito = entrada (${i + 1},${j + 1}) = ${termino}`
+    `  ${d.id}) A = ${fila(A)}, autovalores ${pares.map((x) => x.l).join(', ')}`,
+    `     columnas de P: ${pares.map((x) => col(x.w)).join('  |  ')};  dígito = 5·p(${r},${s}) = ${digito}`
   );
 
   const enunciado =
     `Sea \\(A=${bm3(A)}\\).` +
-    `<ol>` +
-    `<li>Hallá una matriz ortogonal \\(P\\) y una matriz diagonal \\(D\\) tales que \\(A=PDP^{T}\\), con los autovalores de menor a mayor en \\(D\\).</li>` +
-    `<li>Escribí la descomposición espectral \\(A=\\lambda_1u_1u_1^{T}+\\lambda_2u_2u_2^{T}+\\lambda_3u_3u_3^{T}\\).</li>` +
-    `</ol><strong>Tu dígito es la entrada \\((${i + 1},${j + 1})\\) de \\(\\lambda_3u_3u_3^{T}\\).</strong>`;
-  return { id: d.id, enunciado, digito: termino };
+    `<br>Hallá una matriz ortogonal \\(P\\) y una matriz diagonal \\(D\\) tales que \\(A=PDP^{T}\\). ` +
+    `Convención para que \\(P\\) sea única: los autovalores van de menor a mayor en \\(D\\) (una columna de \\(P\\) por autovalor) ` +
+    `y cada columna de \\(P\\) tiene su primera componente no nula positiva.` +
+    `<br><strong>Tu dígito es \\(5p\\), donde \\(p\\) es la entrada de la fila ${r} y columna ${s} de \\(P\\).</strong>`;
+  return { id: d.id, enunciado, digito };
 });
-assert.equal(new Set(ej3.map((e) => e.digito)).size, ej3.length, 'ej3: dígitos repetidos');
 
 // ───────────────── Ejercicio 4: optimización restringida (Q sobre la circunferencia unidad) ─────────────────
 // Q = a·x1² + 2b·x1x2 + c·x2²;  máximo de Q con x1²+x2²=1  =  mayor autovalor de [[a,b],[b,c]].
@@ -206,8 +210,10 @@ const ej4 = ej4defs.map((d) => {
   claves.push(`  ${d.id}) Q = ${Q.replace(/_/g, '').replace(/\^2/g, '²')};  A = [[${d.a}, ${d.b}], [${d.b}, ${d.c}]];  autovalores ${lMin} y ${lMax};  máximo = ${lMax} (dígito), mínimo = ${lMin}`);
 
   const enunciado =
-    `Sea \\(Q(x_1,x_2)=${Q}\\). Hallá el máximo y el mínimo de \\(Q\\) sujeto a \\(x_1^2+x_2^2=1\\).` +
-    `<br><strong>Tu dígito es el valor máximo.</strong>`;
+    `Sea \\(Q(x_1,x_2)=${Q}\\). Considerá solo los vectores \\(\\mathbf{x}=(x_1,x_2)\\) de norma 1, es decir, con \\(x_1^2+x_2^2=1\\). ` +
+    `Entre todos ellos, hallá el mayor y el menor valor que toma \\(Q\\).` +
+    `<br>Pista: \\(Q(\\mathbf{x})=\\mathbf{x}^{T}A\\mathbf{x}\\) con \\(A\\) simétrica.` +
+    `<br><strong>Tu dígito es el mayor valor.</strong>`;
   return { id: d.id, enunciado, digito: lMax };
 });
 assert.equal(new Set(ej4.map((e) => e.digito)).size, ej4.length, 'ej4: dígitos repetidos');
@@ -229,8 +235,8 @@ const banco = [
       `Hay un valor crítico positivo de \\(${e.inc}\\) en el que \\(S\\) deja de serlo. <strong>Tu dígito es ese valor.</strong>`),
   },
   { n: 2, titulo: 'Cambio de variable', variantes: variantes(2, ej2) },
-  { n: 3, titulo: 'Descomposición espectral', variantes: variantes(3, ej3) },
-  { n: 4, titulo: 'Optimización restringida', variantes: variantes(4, ej4) },
+  { n: 3, titulo: 'Diagonalización ortogonal', variantes: variantes(3, ej3) },
+  { n: 4, titulo: 'Máximo y mínimo de Q', variantes: variantes(4, ej4) },
 ];
 
 writeFileSync(
